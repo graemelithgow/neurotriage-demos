@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHS Neurocognitive Spectra Research Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+```
+    :root {
+        --nhs-blue: #005eb8;
+        --nhs-dark-blue: #003087;
+        --nhs-light-blue: #41b6e6;
+        --nhs-green: #00a499;
+        --nhs-warm-yellow: #ffb81c;
+        --nhs-orange: #ed8b00;
+        --nhs-red: #da291c;
+        --nhs-purple: #330072;
+        --nhs-pink: #ae2573;
+        --nhs-grey: #425563;
+        --nhs-light-grey: #f0f4f5;
+        --nhs-mid-grey: #768692;
+        --text-primary: #212b32;
+        --text-secondary: #425563;
+        --background: #ffffff;
+        --card-background: #f0f4f5;
+        --border-light: #d8dde0;
+    }
+    
+    body {
+        background: var(--background);
+        color: var(--text-primary);
+        min-height: 100vh;
+        line-height: 1.6;
+    }
+    
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    /* NHS Header */
+    .nhs-header {
+        background: var(--nhs-blue);
+        color: white;
+        padding: 0;
+        margin-bottom: 30px;
+        border-radius: 0;
+    }
+    
+    .header-top {
+        background: var(--nhs-dark-blue);
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .nhs-logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+    }
+    
+    .header-main {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header-main h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .project-info {
+        text-align: right;
+        font-size: 0.95rem;
+    }
+    
+    .project-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+    
+    .status-indicator {
+        width: 10px;
+        height: 10px;
+        background: var(--nhs-green);
+        border-radius: 50%;
+    }
+    
+    /* Navigation Breadcrumb */
+    .breadcrumb {
+        background: var(--nhs-light-grey);
+        padding: 12px 20px;
+        margin-bottom: 25px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+    
+    .breadcrumb a {
+        color: var(--nhs-blue);
+        text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    /* Key Metrics */
+    .metrics-section {
+        grid-column: 1 / 9;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-light);
+    }
+    
+    .section-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid var(--border-light);
+        background: var(--card-background);
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--nhs-dark-blue);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        padding: 0;
+    }
+    
+    .metric-card {
+        padding: 25px;
+        border-right: 1px solid var(--border-light);
+        border-bottom: 1px solid var(--border-light);
+        transition: background-color 0.2s ease;
+    }
+    
+    .metric-card:hover {
+        background: var(--nhs-light-grey);
+    }
+    
+    .metric-card:nth-child(3n) {
+        border-right: none;
+    }
+    
+    .metric-card:nth-child(n+4) {
+        border-bottom: none;
+    }
+    
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    
+    .metric-title {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        line-height: 1.3;
+    }
+    
+    .metric-icon {
+        width: 35px;
+        height: 35px;
+        background: var(--nhs-blue);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: white;
+    }
+    
+    .metric-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--nhs-dark-blue);
+        margin-bottom: 8px;
+    }
+    
+    .metric-target {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+    }
+    
+    .progress-container {
+        height: 8px;
+        background: var(--border-light);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+    
+    .progress-participants { background: var(--nhs-blue); }
+    .progress-genetics { background: var(--nhs-green); }
+    .progress-neural { background: var(--nhs-light-blue); }
+    .progress-analysis { background: var(--nhs-orange); }
+    .progress-compute { background: var(--nhs-purple); }
+    .progress-timeline { background: var(--nhs-red); }
+    
+    /* Activity Feed */
+    .activity-section {
+        grid-column: 9 / 13;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-light);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .activity-container {
+        flex: 1;
+        padding: 20px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    
+    .activity-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .activity-container::-webkit-scrollbar-track {
+        background: var(--nhs-light-grey);
+    }
+    
+    .activity-container::-webkit-scrollbar-thumb {
+        background: var(--nhs-blue);
+        border-radius: 3px;
+    }
+    
+    .activity-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    
+    .activity-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-time {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-bottom: 5px;
+    }
+    
+    .activity-message {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .icon-success { background: var(--nhs-green); }
+    .icon-info { background: var(--nhs-blue); }
+    .icon-warning { background: var(--nhs-warm-yellow); color: var(--text-primary); }
+    .icon-error { background: var(--nhs-red); }
+    
+    /* Research Insights */
+    .insights-section {
+        grid-column: 1 / 9;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-light);
+    }
+    
+    .insights-content {
+        padding: 25px;
+    }
+    
+    .insights-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+    
+    .insight-card {
+        background: var(--card-background);
+        border-radius: 6px;
+        padding: 20px;
+        border: 1px solid var(--border-light);
+    }
+    
+    .insight-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--nhs-dark-blue);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .findings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .finding-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .finding-item:last-child {
+        border-bottom: none;
+    }
+    
+    .gene-name {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    
+    .p-value {
+        background: var(--nhs-blue);
+        color: white;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .interaction-strength {
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .strength-strong { background: var(--nhs-green); color: white; }
+    .strength-moderate { background: var(--nhs-warm-yellow); color: var(--text-primary); }
+    .strength-weak { background: var(--nhs-light-grey); color: var(--text-primary); }
+    
+    /* Progress Overview */
+    .progress-section {
+        grid-column: 9 / 13;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-light);
+    }
+    
+    .progress-content {
+        padding: 25px;
+    }
+    
+    .overall-progress {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .progress-circle {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+        position: relative;
+    }
+    
+    .progress-percentage {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--nhs-dark-blue);
+    }
+    
+    .progress-label {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+    
+    .milestone-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .milestone-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .milestone-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+    }
+    
+    .milestone-name {
+        font-weight: 500;
+    }
+    
+    .milestone-percent {
+        color: var(--text-secondary);
+    }
+    
+    .milestone-track {
+        height: 6px;
+        background: var(--border-light);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    
+    .milestone-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.8s ease;
+    }
+    
+    /* Timeline */
+    .timeline-section {
+        grid-column: 1 / 13;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-light);
+    }
+    
+    .timeline-content {
+        padding: 25px;
+    }
+    
+    .timeline-phases {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    
+    .phase-card {
+        background: var(--card-background);
+        border-radius: 6px;
+        padding: 20px;
+        border: 1px solid var(--border-light);
+        text-align: center;
+    }
+    
+    .phase-number {
+        width: 40px;
+        height: 40px;
+        background: var(--nhs-blue);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin: 0 auto 15px;
+    }
+    
+    .phase-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--nhs-dark-blue);
+        margin-bottom: 10px;
+    }
+    
+    .phase-status {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .metrics-section,
+        .activity-section,
+        .insights-section,
+        .progress-section,
+        .timeline-section {
+            grid-column: 1;
+        }
+        
+        .metrics-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .insights-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .timeline-phases {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .header-main {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .timeline-phases {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- NHS Header -->
+    <div class="nhs-header">
+        <div class="header-top">
+            <div class="nhs-logo">
+                <i class="fas fa-hospital"></i>
+                <span>NHS Research & Development</span>
+            </div>
+            <div>Research Dashboard v2.1</div>
+        </div>
+        <div class="header-main">
+            <h1>Neurocognitive Spectra Theory (NST) Research Programme</h1>
+            <div class="project-info">
+                <div class="project-status">
+                    <div class="status-indicator"></div>
+                    <span>Phase 2 - Active Recruitment</span>
+                </div>
+                <div>Grant Reference: RG-2024-NST-001</div>
+            </div>
+        </div>
+    </div>
+
+```
+<div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="#">NHS Research</a> / <a href="#">Mental Health & Neuroscience</a> / <a href="#">NST Programme</a> / Dashboard
+    </div>
+    
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+        <!-- Key Metrics -->
+        <div class="metrics-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Research Metrics Overview
+                </h2>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Study Participants<br>Enrolled</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="participants">7,842</div>
+                    <div class="metric-target">Target: 10,000 participants</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-participants" style="width: 78%;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Significant Genetic<br>Associations</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="genetic-hits">3</div>
+                    <div class="metric-target">Target: 5 validated hits</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-genetics" style="width: 60%;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Neural Connectomes<br>Mapped</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="connectomes">824</div>
+                    <div class="metric-target">Target: 1,200 scans</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-neural" style="width: 69%;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Statistical Effect<br>Size (Cohen's d)</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="effect-size">0.58</div>
+                    <div class="metric-target">Target: ≥0.7 effect size</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-analysis" style="width: 83%;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">HPC Cluster<br>Utilisation</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="compute-usage">78%</div>
+                    <div class="metric-target">Optimal: 85-95% utilisation</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-compute" style="width: 78%;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Days to Project<br>Completion</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="days-remaining">142</div>
+                    <div class="metric-target">Project duration: 18 months</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-timeline" style="width: 21%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Feed -->
+        <div class="activity-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-activity"></i>
+                    Recent Activity
+                </h2>
+            </div>
+            
+            <div class="activity-container">
+                <div class="activity-item">
+                    <div class="activity-icon icon-success">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-time">14:32 GMT</div>
+                        <div class="activity-message">NST research infrastructure successfully deployed and operational</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon icon-info">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-time">14:35 GMT</div>
+                        <div class="activity-message">UK Biobank data integration pipeline established</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon icon-success">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-time">14:38 GMT</div>
+                        <div class="activity-message">Patient recruitment via NHS Digital platforms initiated</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon icon-info">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-time">14:42 GMT</div>
+                        <div class="activity-message">GWAS analysis pipeline activated for candidate gene screening</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon icon-success">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-time">14:45 GMT</div>
+                        <div class="activity-message">Significant association detected: CYP26B1×COMT interaction (p=1.2×10⁻¹²)</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon icon-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-time">14:47 GMT</div>
+                        <div class="activity-message">High memory usage detected in analysis cluster - auto-scaling initiated</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Research Insights -->
+        <div class="insights-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-flask"></i>
+                    Research Findings & Genetic Insights
+                </h2>
+            </div>
+            
+            <div class="insights-content">
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <h3 class="insight-title">
+                            <i class="fas fa-star"></i>
+                            Genome-Wide Significant Hits
+                        </h3>
+                        <div class="findings-list">
+                            <div class="finding-item">
+                                <div class="gene-name">CYP26B1</div>
+                                <div class="p-value">p=1.2×10⁻¹²</div>
+                            </div>
+                            <div class="finding-item">
+                                <div class="gene-name">COMT</div>
+                                <div class="p-value">p=3.8×10⁻⁹</div>
+                            </div>
+                            <div class="finding-item">
+                                <div class="gene-name">SHANK3</div>
+                                <div class="p-value">p=7.1×10⁻⁸</div>
+                            </div>
+                            <div class="finding-item">
+                                <div class="gene-name">OXTR</div>
+                                <div class="p-value">p=1.4×10⁻⁷</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3 class="insight-title">
+                            <i class="fas fa-project-diagram"></i>
+                            Epistatic Interactions
+                        </h3>
+                        <div class="findings-list">
+                            <div class="finding-item">
+                                <div class="gene-name">CYP26B1 × COMT</div>
+                                <div class="interaction-strength strength-strong">Strong</div>
+                            </div>
+                            <div class="finding-item">
+                                <div class="gene-name">SHANK3 × OXTR</div>
+                                <div class="interaction-strength strength-moderate">Moderate</div>
+                            </div>
+                            <div class="finding-item">
+                                <div class="gene-name">COMT × BDNF</div>
+                                <div class="interaction-strength strength-weak">Weak</div>
+                            </div>
+                            <div class="finding-item">
+                                <div class="gene-name">CYP26B1 × OXTR</div>
+                                <div class="interaction-strength strength-strong">Strong</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Progress Overview -->
+        <div class="progress-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    Project Progress
+                </h2>
+            </div>
+            
+            <div class="progress-content">
+                <div class="overall-progress">
+                    <div class="progress-circle">
+                        <svg width="120" height="120" viewBox="0 0 42 42">
+                            <circle cx="21" cy="21" r="15.5" fill="none" stroke="#d8dde0" stroke-width="3"/>
+                            <circle cx="21" cy="21" r="15.5" fill="none" stroke="#005eb8" stroke-width="3" 
+                                    stroke-dasharray="77.8" stroke-dashoffset="15.56" stroke-linecap="round" transform="rotate(-90 21 21)"/>
+                        </svg>
+                        <div class="progress-percentage">80%</div>
+                    </div>
+                    <div class="progress-label">Overall Progress</div>
+                </div>
+                
+                <div class="milestone-list">
+                    <div class="milestone-item">
+                        <div class="milestone-header">
+                            <div class="milestone-name">Participant Recruitment</div>
+                            <div class="milestone-percent">78%</div>
+                        </div>
+                        <div class="milestone-track">
+                            <div class="milestone-fill progress-participants" style="width: 78%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="milestone-item">
+                        <div class="milestone-header">
+                            <div class="milestone-name">Genetic Analysis</div>
+                            <div class="milestone-percent">60%</div>
+                        </div>
+                        <div class="milestone-track">
+                            <div class="milestone-fill progress-genetics" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="milestone-item">
+                        <div class="milestone-header">
+                            <div class="milestone-name">Neural Mapping</div>
+                            <div class="milestone-percent">69%</div>
+                        </div>
+                        <div class="milestone-track">
+                            <div class="milestone-fill progress-neural" style="width: 69%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="milestone-item">
+                        <div class="milestone-header">
+                            <div class="milestone-name">Data Integration</div>
+                            <div class="milestone-percent">85%</div>
+                        </div>
+                        <div class="milestone-track">
+                            <div class="milestone-fill progress-analysis" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Timeline -->
+        <div class="timeline-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Project Timeline & Milestones
+                </h2>
+            </div>
+            
+            <div class="timeline-content">
+                <div class="timeline-phases">
+                    <div class="phase-card">
+                        <div class="phase-number">1</div>
+                        <div class="phase-title">Infrastructure & Ethics</div>
+                        <div class="phase-status">✓ Complete</div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">2</div>
+                        <div class="phase-title">Participant Recruitment</div>
+                        <div class="phase-status">🔄 In Progress (78%)</div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">3</div>
+                        <div class="phase-title">Data Collection & Analysis</div>
+                        <div class="phase-status">🔄 In Progress (65%)</div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">4</div>
+                        <div class="phase-title">Validation & Publication</div>
+                        <div class="phase-status">⏳ Pending</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // NHS-appropriate data simulation
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize counters
+        const participantEl = document.getElementById('participants');
+        const geneticHitsEl = document.getElementById('genetic-hits');
+        const connectomesEl = document.getElementById('connectomes');
+        const effectSizeEl = document.getElementById('effect-size');
+        const computeUsageEl = document.getElementById('compute-usage');
+        const daysRemainingEl = document.getElementById('days-remaining');
+        
+        let participants = 7842;
+        let hits = 3;
+        let connectomes = 824;
+        let effectSize = 0.58;
+        let computeUsage = 78;
+        let daysRemaining = 142;
+        
+        // Activity container
+        const activityContainer = document.querySelector('.activity-container');
+        
+        // Function to add activity entry
+        function addActivity(iconClass, iconColor, message) {
+            const timestamp = new Date();
+            const timeStr = timestamp.toLocaleTimeString('en-GB', {
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false
+            }) + ' GMT';
+            
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+            activityItem.innerHTML = `
+                <div class="activity-icon ${iconColor}">
+                    <i class="${iconClass}"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-time">${timeStr}</div>
+                    <div class="activity-message">${message}</div>
+                </div>
+            `;
+            
+            activityContainer.insertBefore(activityItem, activityContainer.firstChild);
+            
+            // Keep only last 8 entries
+            if (activityContainer.children.length > 8) {
+                activityContainer.removeChild(activityContainer.lastChild);
+            }
+        }
+        
+        // Professional NHS-appropriate updates
+        setInterval(() => {
+            // Gradual participant increase
+            const newParticipants = participants + Math.floor(Math.random() * 15);
+            participantEl.textContent = newParticipants.toLocaleString();
+            participants = newParticipants;
+            
+            // Update progress bars
+            const progress = Math.min(1, participants / 10000);
+            document.querySelector('.progress-participants').style.width = `${progress * 100}%`;
+            document.querySelector('.milestone-fill.progress-participants').style.width = `${progress * 100}%`;
+            
+            // Occasional genetic discoveries
+            if (Math.random() > 0.92 && hits < 5) {
+                hits++;
+                geneticHitsEl.textContent = hits;
+                const progressPercent = (hits/5)*100;
+                document.querySelector('.progress-genetics').style.width = `${progressPercent}%`;
+                document.querySelector('.milestone-fill.progress-genetics').style.width = `${progressPercent}%`;
+                
+                const genes = ['FOXG1', 'TCF4', 'BDNF', 'HTR2A', 'AVPR1A'];
+                const gene = genes[Math.floor(Math.random() * genes.length)];
+                const pValue = `${(Math.random() * 9 + 1).toFixed(1)}×10⁻${Math.floor(Math.random() * 3) + 8}`;
+                
+                addActivity('fas fa-flask', 'icon-success', `Novel genetic association identified: ${gene} (p=${pValue})`);
+            }
+            
+            // Update other metrics
+            connectomes += Math.floor(Math.random() * 5);
+            connectomesEl.textContent = connectomes;
+            const connectomeProgress = Math.min(100, (connectomes/1200)*100);
+            document.querySelector('.progress-neural').style.width = `${connectomeProgress}%`;
+            document.querySelector('.milestone-fill.progress-neural').style.width = `${connectomeProgress}%`;
+            
+            effectSize = Math.min(0.7, effectSize + (Math.random() * 0.003));
+            effectSizeEl.textContent = effectSize.toFixed(2);
+            document.querySelector('.progress-analysis').style.width = `${(effectSize/0.7)*100}%`;
+            document.querySelector('.milestone-fill.progress-analysis').style.width = `${(effectSize/0.7)*100}%`;
+            
+            computeUsage = 70 + Math.floor(Math.random() * 15);
+            computeUsageEl.textContent = `${computeUsage}%`;
+            document.querySelector('.progress-compute').style.width = `${computeUsage}%`;
+            
+            daysRemaining -= 0.01;
+            daysRemainingEl.textContent = Math.floor(daysRemaining);
+            document.querySelector('.progress-timeline').style.width = `${(1 - (daysRemaining/180)) * 100}%`;
+            
+            // Professional activity updates
+            if (Math.random() > 0.8) {
+                const activities = [
+                    'NHS Digital patient cohort successfully contacted',
+                    'Ethics approval received for extended data collection',
+                    'Quality assurance checks completed on neuroimaging data',
+                    'Cross-validation with European cohorts initiated',
+                    'Clinical advisory board meeting scheduled',
+                    'Interim findings prepared for NIHR review'
+                ];
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                
+                addActivity('fas fa-info-circle', 'icon-info', activity);
+            }
+            
+            if (Math.random() > 0.85) {
+                const systemUpdates = [
+                    'Automated quality control pipeline processing complete',
+                    'Data backup to NHS secure cloud storage successful',
+                    'Research database synchronisation with UK Biobank completed',
+                    'Statistical analysis cluster auto-scaled to meet demand'
+                ];
+                const update = systemUpdates[Math.floor(Math.random() * systemUpdates.length)];
+                
+                addActivity('fas fa-cog', 'icon-success', update);
+            }
+            
+            // Occasional breakthrough
+            if (Math.random() > 0.98) {
+                addActivity('fas fa-trophy', 'icon-success', 'Breakthrough: Novel neurocognitive pathway validated across multiple cohorts');
+            }
+            
+        }, 2000); // Slower, more professional update rate
+    });
+</script>
+```
+
+</body>
+</html>
